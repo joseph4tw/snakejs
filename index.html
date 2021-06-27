@@ -5,14 +5,57 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake</title>
-    <link href="./style.css" rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet">
 </head>
 <body onload="start();">
     <canvas id="canvas" width="300px" height="300px">
         <p>Snake game canvas.</p>
     </canvas>
     <button id="startOver" onclick="start();">Start Over</button>
-    <script src="./snake.js"></script>
-    <script src="./circularLinkedList.js"></script>
+    <audio id="apple-crunch-1">
+        <source src="./sounds/apple_crunch_1.mp3">
+    </audio>
+    <audio id="apple-crunch-2">
+        <source src="./sounds/apple_crunch_2.mp3">
+    </audio>
+    <audio id="apple-crunch-3">
+        <source src="./sounds/apple_crunch_3.mp3">
+    </audio>
+    <audio id="apple-crunch-4">
+        <source src="./sounds/apple_crunch_4.mp3">
+    </audio>
+    <audio id="level2">
+        <source src="./sounds/level2.mp3">
+    </audio>
+    <audio id="level3">
+        <source src="./sounds/level3.mp3">
+    </audio>
+    <audio id="level4">
+        <source src="./sounds/level4.mp3">
+    </audio>
+    <audio id="level5">
+        <source src="./sounds/level5.mp3">
+    </audio>
+    <audio id="level6">
+        <source src="./sounds/level6.mp3">
+    </audio>
+    <audio id="level7">
+        <source src="./sounds/level7.mp3">
+    </audio>
+    <audio id="level8">
+        <source src="./sounds/level8.mp3">
+    </audio>
+    <audio id="level9">
+        <source src="./sounds/level9.mp3">
+    </audio>
+    <audio id="level10">
+        <source src="./sounds/level10.mp3">
+    </audio>
+    <audio id="game-over">
+        <source src="./sounds/game_over.mp3">
+    </audio>
+    <script src="./js/circularLinkedList.js"></script>
+    <script src="./js/sounds.js"></script>
+    <script src="./js/snake.js"></script>
 </body>
 </html>

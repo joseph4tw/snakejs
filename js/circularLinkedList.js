@@ -1,7 +1,7 @@
 /**
  * Limited circular linked list. Right now, this is all we need.
  */
-function circularLinkedList() {
+function CircularLinkedList() {
     let Node = function(value) {
         this.prev = null;
         this.value = value;
