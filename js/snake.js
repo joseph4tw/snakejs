@@ -21,7 +21,6 @@ function Snake() {
         down: 3,
     };
     let snakeFill;
-    let snakeStrokeColor;
 
     const directionsLinkedList = new CircularLinkedList();
     directionsLinkedList.append(directions.left);
@@ -31,9 +30,8 @@ function Snake() {
 
     let nextDirection = currentDirection;
 
-    this.setColors = (fill, strokeColor) => {
+    this.setColor = (fill) => {
         snakeFill = fill;
-        snakeStrokeColor = strokeColor;
     };
 
     this.move = () => {
@@ -195,9 +193,7 @@ function Snake() {
 
     function drawSnakePart(ctx, x, y) {
         ctx.fillStyle = snakeFill;
-        ctx.fillRect(x, y, snakePartSize, snakePartSize);
-        ctx.strokeStyle = snakeStrokeColor;
-        ctx.strokeRect(x, y, snakePartSize, snakePartSize);
+        ctx.fillRect(x + 1, y + 1, snakePartSize - 1, snakePartSize - 1);
     }
 }
 

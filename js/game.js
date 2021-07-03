@@ -16,10 +16,11 @@ registerEventListeners();
 
 const game = {
     gameOver: false,
+    soundsOn: false,
     gameOverColors: {
         backgroundColor: '#ccc',
         snakeColor: '#555',
-        snakeStrokeColor: '#ccc'
+        appleColor: '#000'
     },
     points: 0,
     apple: undefined,
@@ -29,33 +30,33 @@ const game = {
             index: 0,
             name: 1,
             speed: 300,
-            backgroundColor: '#2e4057',
+            backgroundColor: '#395e66',
             snakeColor: '#000',
-            snakeStrokeColor: '#fff',
+            appleColor: '#000'
         },
         {
             index: 1,
             name: 2,
             speed: 250,
-            backgroundColor: '#2e4057',
+            backgroundColor: '#387d70',
             snakeColor: '#000',
-            snakeStrokeColor: '#fff',
+            appleColor: '#000'
         },
         {
             index: 2,
             name: 3,
             speed: 200,
-            backgroundColor: '#048ba8',
+            backgroundColor: '#32936f',
             snakeColor: '#000',
-            snakeStrokeColor: '#fff',
+            appleColor: '#000'
         },
         {
             index: 3,
             name: 4,
             speed: 150,
-            backgroundColor: '#048ba8',
+            backgroundColor: '#26a96c',
             snakeColor: '#000',
-            snakeStrokeColor: '#fff',
+            appleColor: '#000'
         },
         {
             index: 4,
@@ -63,39 +64,39 @@ const game = {
             speed: 100,
             backgroundColor: '#99c24d',
             snakeColor: '#000',
-            snakeStrokeColor: '#fff',
+            appleColor: '#000'
         },
         {
             index: 5,
             name: 6,
             speed: 80,
-            backgroundColor: '#99c24d',
+            backgroundColor: '#eded4e',
             snakeColor: '#000',
-            snakeStrokeColor: '#fff',
+            appleColor: '#000'
         },
         {
             index: 6,
             name: 7,
             speed: 60,
-            backgroundColor: '#f18f01',
+            backgroundColor: '#f0ae5d',
             snakeColor: '#000',
-            snakeStrokeColor: '#fff',
+            appleColor: '#000'
         },
         {
             index: 7,
             name: 8,
             speed: 40,
-            backgroundColor: '#f18f01',
+            backgroundColor: '#f36b46',
             snakeColor: '#000',
-            snakeStrokeColor: '#fff',
+            appleColor: '#000'
         },
         {
             index: 8,
             name: 9,
             speed: 30,
-            backgroundColor: '#cb0000',
-            snakeColor: '#fff',
-            snakeStrokeColor: '#000',
+            backgroundColor: '#e93434',
+            snakeColor: '#000',
+            appleColor: '#000'
         },
         {
             index: 9,
@@ -103,14 +104,14 @@ const game = {
             speed: 20,
             backgroundColor: '#990000',
             snakeColor: '#fff',
-            snakeStrokeColor: '#000',
+            appleColor: '#fff'
         },
     ],
 };
 
 game.level = game.levels[0];
 game.apple = createNewApple(ctx, snake);
-snake.setColors(game.level.snakeColor, game.level.snakeStrokeColor);
+snake.setColor(game.level.snakeColor);
 
 function startGame() {
     window.requestAnimationFrame(draw);
@@ -119,7 +120,7 @@ function startGame() {
 function draw() {
     if (!snake.canMove(ctx)) {
         game.gameOver = true;
-        sounds.gameOver.play();
+        playSound(sounds.gameOver);
         return;
     }
 
@@ -129,7 +130,7 @@ function draw() {
         game.points += 10;
         console.log(`points: ${game.points}`);
         const appleSound = getRandomAppleSoundEffect();
-        appleSound.play();
+        playSound(appleSound);
 
         if (canLevelUp(game)) {
             levelUp(game);
@@ -161,7 +162,7 @@ function canLevelUp(game) {
 
 function levelUp(game) {
     game.level = game.levels[++game.level.index];
-    snake.setColors(game.level.snakeColor, game.level.snakeStrokeColor);
+    snake.setColor(game.level.snakeColor);
     playLevelUpSoundEffect(game.level.name);
     console.log(`level: ${game.level.name}`)
 }
@@ -198,10 +199,8 @@ function isSpotOccupied(snake, x, y) {
 }
 
 function drawApple(ctx, x, y) {
-    ctx.fillStyle = '#000';
-    ctx.fillRect(x, y, snakePartSize, snakePartSize);
-    ctx.strokeStyle = '#ccc';
-    ctx.strokeRect(x, y, snakePartSize, snakePartSize);
+    ctx.fillStyle = game.level.appleColor;
+    ctx.fillRect(x + 1, y + 1, snakePartSize - 1, snakePartSize - 1);
 }
 
 function getRandomAppleSoundEffect() {
@@ -210,7 +209,15 @@ function getRandomAppleSoundEffect() {
 }
 
 function playLevelUpSoundEffect(level) {
-    sounds.levelUpSounds[level] && sounds.levelUpSounds[level].play();
+    if (sounds.levelUpSounds[level]) {
+        playSound(sounds.levelUpSounds[level]);
+    };
+}
+
+function playSound(sound) {
+    if (game.soundsOn) {
+        sound.play();
+    }
 }
 
 function registerEventListeners() {
