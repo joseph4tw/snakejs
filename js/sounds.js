@@ -35,3 +35,5 @@ function Sounds() {
 
     this.gameOver = document.querySelector('audio#game-over');
 }
+
+export { Sounds };

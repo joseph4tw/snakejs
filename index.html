@@ -7,11 +7,10 @@
     <title>Snake</title>
     <link href="./css/style.css" rel="stylesheet">
 </head>
-<body onload="start();">
+<body>
     <canvas id="canvas" width="300px" height="300px">
         <p>Snake game canvas.</p>
     </canvas>
-    <button id="startOver" onclick="start();">Start Over</button>
     <audio id="apple-crunch-1">
         <source src="./sounds/apple_crunch_1.mp3">
     </audio>
@@ -54,8 +53,14 @@
     <audio id="game-over">
         <source src="./sounds/game_over.mp3">
     </audio>
-    <script src="./js/circularLinkedList.js"></script>
-    <script src="./js/sounds.js"></script>
-    <script src="./js/snake.js"></script>
+    <script type="module" src="./js/game.js"></script>
+    <script type="module" src="./js/snake.js"></script>
+    <script type="module" src="./js/circularLinkedList.js"></script>
+    <script type="module" src="./js/sounds.js"></script>
+    <!-- <script src="./js/snake.js"></script> -->
+    <script type="module">
+        import { startGame } from './js/game.js'
+        startGame();
+    </script>
 </body>
 </html>

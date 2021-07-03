@@ -52,3 +52,5 @@ function CircularLinkedList() {
         return head;
     };
 }
+
+export { CircularLinkedList };
