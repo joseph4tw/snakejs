@@ -4,6 +4,12 @@ function Snake() {
     const snake = [
         { x: 30, y: 30 },
         { x: 20, y: 30 },
+        { x: 20, y: 40 },
+        { x: 20, y: 50 },
+        { x: 20, y: 60 },
+        { x: 20, y: 70 },
+        { x: 20, y: 80 },
+        { x: 20, y: 90 },
     ];
     let head = snake[0];
     const snakePartSize = 10;
@@ -23,12 +29,15 @@ function Snake() {
     let currentDirection = directionsLinkedList.append(directions.right);
     directionsLinkedList.append(directions.down);
 
+    let nextDirection = currentDirection;
+
     this.setColors = (fill, strokeColor) => {
         snakeFill = fill;
         snakeStrokeColor = strokeColor;
     };
 
     this.move = () => {
+        currentDirection = nextDirection;
         // update body to follow head
         for (let i = snake.length - 1; i > 0; i--) {
             snake[i] = { x: snake[i - 1].x, y: snake[i - 1].y };
@@ -41,28 +50,72 @@ function Snake() {
     };
 
     this.canMove = (ctx) => {
-        if (currentDirection.value === directions.left) {
+        if (canMoveOnCanvas(ctx)) {
+            if (willEatItself()) {
+                return false;
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+
+    const canMoveOnCanvas = (ctx) => {
+        if (nextDirection.value === directions.left) {
             if (head.x - moveAmount < 0) {
                 return false;
             }
         }
-        else if (currentDirection.value === directions.up) {
+        else if (nextDirection.value === directions.up) {
             if (head.y - moveAmount < 0) {
                 return false;
             }
         }
-        else if (currentDirection.value === directions.right) {
+        else if (nextDirection.value === directions.right) {
             if (head.x + moveAmount > ctx.canvas.width - snakePartSize) {
                 return false;
             }
         }
-        else if (currentDirection.value === directions.down) {
+        else if (nextDirection.value === directions.down) {
             if (head.y + moveAmount > ctx.canvas.height - snakePartSize) {
                 return false;
             }
         }
 
         return true;
+    };
+
+    const willEatItself = () => {
+        const nextMoveCoordinates = {
+            x: undefined,
+            y: undefined,
+        };
+
+        if (nextDirection.value === directions.left) {
+            nextMoveCoordinates.x = head.x - moveAmount;
+            nextMoveCoordinates.y = head.y;
+        }
+        else if (nextDirection.value === directions.up) {
+            nextMoveCoordinates.x = head.x;
+            nextMoveCoordinates.y = head.y - moveAmount;
+        }
+        else if (nextDirection.value === directions.right) {
+            nextMoveCoordinates.x = head.x + moveAmount;
+            nextMoveCoordinates.y = head.y;
+        }
+        else if (nextDirection.value === directions.down) {
+            nextMoveCoordinates.x = head.x;
+            nextMoveCoordinates.y = head.y + moveAmount;
+        }
+
+        for (let i = 1; i < snake.length; i++) {
+            if (snake[i].x === nextMoveCoordinates.x && snake[i].y === nextMoveCoordinates.y) {
+                return true;
+            }
+        }
+
+        return false;
     };
 
     this.setNewDirection = (attemptedMove) => {
@@ -85,32 +138,33 @@ function Snake() {
         }
 
         if (currentDirection.prev.value === requestedDirection) {
-            currentDirection = currentDirection.prev;
-            return;
+            nextDirection = currentDirection.prev;
         }
         else if (currentDirection.next.value === requestedDirection) {
-            currentDirection = currentDirection.next;
-            return;
+            nextDirection = currentDirection.next;
+        }
+        else if (currentDirection.value === requestedDirection) {
+            nextDirection = currentDirection;
         }
     };
 
     this.canEatApple = (apple) => {
-        if (currentDirection.value === directions.left) {
+        if (nextDirection.value === directions.left) {
             if (head.y === apple.y && head.x - moveAmount === apple.x) {
                 return true;
             }
         }
-        else if (currentDirection.value === directions.up) {
+        else if (nextDirection.value === directions.up) {
             if (head.x === apple.x && head.y - moveAmount === apple.y) {
                 return true;
             }
         }
-        else if (currentDirection.value === directions.right) {
+        else if (nextDirection.value === directions.right) {
             if (head.y === apple.y && head.x + moveAmount === apple.x) {
                 return true;
             }
         }
-        else if (currentDirection.value === directions.down) {
+        else if (nextDirection.value === directions.down) {
             if (head.x === apple.x && head.y + moveAmount === apple.y) {
                 return true;
             }
