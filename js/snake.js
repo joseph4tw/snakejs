@@ -4,12 +4,6 @@ function Snake() {
     const snake = [
         { x: 30, y: 30 },
         { x: 20, y: 30 },
-        { x: 20, y: 40 },
-        { x: 20, y: 50 },
-        { x: 20, y: 60 },
-        { x: 20, y: 70 },
-        { x: 20, y: 80 },
-        { x: 20, y: 90 },
     ];
     let head = snake[0];
     const snakePartSize = 10;

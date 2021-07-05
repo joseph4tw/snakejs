@@ -16,7 +16,7 @@ registerEventListeners();
 
 const game = {
     gameOver: false,
-    soundsOn: false,
+    soundsOn: true,
     gameOverColors: {
         backgroundColor: '#ccc',
         snakeColor: '#555',
