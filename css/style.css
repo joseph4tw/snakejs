@@ -1,3 +1,32 @@
+body {
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.item-left {
+    grid-area: left;
+    padding: 1em;
+}
+
+.item-center {
+    grid-area: center;
+}
+
+.item-right {
+    grid-area: right;
+    padding: 1em;
+}
+
+.container {
+    display: inline-grid;
+    padding: 0;
+    margin: 0;
+    grid-template-columns: 200px auto 200px;
+    grid-template-rows: none;
+    grid-template-areas: "left center right";
+}
+
 canvas {
     display: block;
 }

@@ -2,6 +2,9 @@ import { Snake } from './snake.js';
 import { Sounds } from './sounds.js';
 
 const canvas = document.getElementById('canvas');
+const scoreElem = document.getElementById('score');
+const levelElem = document.getElementById('level');
+const soundsElem = document.getElementById('sounds');
 
 if (!canvas.getContext) {
     console.warn('canvas element not supported - cannot run game');
@@ -11,7 +14,7 @@ const ctx = canvas.getContext('2d');
 
 const sounds = new Sounds();
 const snake = new Snake();
-const snakePartSize = 10;
+const snakePartSize = 20;
 registerEventListeners();
 
 const game = {
@@ -128,7 +131,7 @@ function draw() {
         snake.eatApple(game.apple);
         game.apple = undefined;
         game.points += 10;
-        console.log(`points: ${game.points}`);
+        scoreElem.textContent = game.points;
         const appleSound = getRandomAppleSoundEffect();
         playSound(appleSound);
 
@@ -153,7 +156,7 @@ function draw() {
 
 function clearCanvas(ctx) {
     ctx.fillStyle = game.level.backgroundColor;
-    ctx.fillRect(0, 0, 300, 300);
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
 function canLevelUp(game) {
@@ -164,7 +167,7 @@ function levelUp(game) {
     game.level = game.levels[++game.level.index];
     snake.setColor(game.level.snakeColor);
     playLevelUpSoundEffect(game.level.name);
-    console.log(`level: ${game.level.name}`)
+    levelElem.textContent = game.level.name;
 }
 
 function createNewApple(ctx, snake) {
@@ -230,6 +233,54 @@ function registerEventListeners() {
         snake.setNewDirection(code);
         e.preventDefault();
     });
+
+    soundsElem.addEventListener('click', () => {
+        game.soundsOn = !game.soundsOn;
+        soundsElem.textContent = `Sounds ${game.soundsOn ? 'On' : 'Off'}`;
+    });
+
+    canvas.addEventListener("touchstart", handleStart, false);
+    canvas.addEventListener("touchend", handleEnd, false);
+    canvas.addEventListener("touchcancel", handleCancel, false);
+}
+
+let touchStart;
+
+function handleStart(evt) {
+    evt.preventDefault();
+    touchStart = copyTouch(evt.changedTouches[0]);
+}
+
+function handleEnd(evt) {
+    evt.preventDefault();
+    const touchEnd = copyTouch(evt.changedTouches[0]);
+
+    const xDiff = touchEnd.pageX - touchStart.pageX;
+    const yDiff = touchEnd.pageY - touchStart.pageY;
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        if (xDiff > 0) {
+            snake.setNewDirection('ArrowRight');
+        }
+        else {
+            snake.setNewDirection('ArrowLeft');
+        }
+    }
+    else {
+        if (yDiff > 0) {
+            snake.setNewDirection('ArrowDown');
+        }
+        else {
+            snake.setNewDirection('ArrowUp');
+        }
+    }
+}
+
+function handleCancel(evt) {
+    touchStart = undefined;
+}
+
+function copyTouch({ identifier, pageX, pageY }) {
+    return { identifier, pageX, pageY };
 }
 
 export { startGame };

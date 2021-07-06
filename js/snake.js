@@ -2,11 +2,11 @@ import { CircularLinkedList } from './circularLinkedList.js';
 
 function Snake() {
     const snake = [
-        { x: 30, y: 30 },
-        { x: 20, y: 30 },
+        { x: 60, y: 60 },
+        { x: 40, y: 60 },
     ];
     let head = snake[0];
-    const snakePartSize = 10;
+    const snakePartSize = 20;
     const moveAmount = snakePartSize;
     const directions = {
         left: 0,

@@ -8,9 +8,26 @@
     <link href="./css/style.css" rel="stylesheet">
 </head>
 <body>
-    <canvas id="canvas" width="300px" height="300px">
-        <p>Snake game canvas.</p>
-    </canvas>
+    <div class="container">
+        <div class="item-left">
+            <h1>Snake.js</h1>
+            <h2>Level: <span id="level">1</span></h2>
+            <h2>Score: <span id="score">0</span></h2>
+            <button id="sounds">Sound On</button>
+        </div>
+        <canvas id="canvas" class="item-center" width="500" height="500">
+            <p>Snake game canvas.</p>
+        </canvas>
+        <div class="item-right">
+            <h2>Instructions</h2>
+            <p>
+                Use your keyboard arrows to move the snake in the desired direction.
+            </p>
+            <p>
+                If on mobile, swipe in the direction you want the snake to move to.
+            </p>
+        </div>
+    </div>
     <audio id="apple-crunch-1">
         <source src="./sounds/apple_crunch_1.mp3">
     </audio>
