@@ -16,10 +16,11 @@ const sounds = new Sounds();
 const snake = new Snake();
 const snakePartSize = 20;
 registerEventListeners();
+const soundSettingFromStorage = localStorage.getItem('sounds') !== null ? (localStorage.getItem('sounds').toLowerCase() === 'true') : true;
 
 const game = {
     gameOver: false,
-    soundsOn: true,
+    soundsOn: soundSettingFromStorage,
     gameOverColors: {
         backgroundColor: '#ccc',
         snakeColor: '#555',
@@ -115,6 +116,7 @@ const game = {
 game.level = game.levels[0];
 game.apple = createNewApple(ctx, snake);
 snake.setColor(game.level.snakeColor);
+soundsElem.textContent = `Sounds ${game.soundsOn ? 'On' : 'Off'}`;
 
 function startGame() {
     window.requestAnimationFrame(draw);
@@ -234,10 +236,7 @@ function registerEventListeners() {
         e.preventDefault();
     });
 
-    soundsElem.addEventListener('click', () => {
-        game.soundsOn = !game.soundsOn;
-        soundsElem.textContent = `Sounds ${game.soundsOn ? 'On' : 'Off'}`;
-    });
+    soundsElem.addEventListener('click', toggleSound);
 
     canvas.addEventListener("touchstart", handleStart, false);
     canvas.addEventListener("touchend", handleEnd, false);
@@ -281,6 +280,12 @@ function handleCancel(evt) {
 
 function copyTouch({ identifier, pageX, pageY }) {
     return { identifier, pageX, pageY };
+}
+
+function toggleSound() {
+    game.soundsOn = !game.soundsOn;
+    localStorage.setItem('sounds', game.soundsOn);
+    soundsElem.textContent = `Sounds ${game.soundsOn ? 'On' : 'Off'}`;
 }
 
 export { startGame };
