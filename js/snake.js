@@ -24,6 +24,16 @@ function Snake() {
 
     let nextDirection = currentDirection;
 
+    this.body = snake;
+
+    this.reset = () => {
+        snake.splice(0, snake.length);
+        snake.push({ x: 60, y: 60 });
+        snake.push({ x: 40, y: 60 });
+        nextDirection = directionsLinkedList.findNodeByValue(directions.right);
+        head = snake[0];
+    };
+
     this.setColor = (fill) => {
         snakeFill = fill;
     };

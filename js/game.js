@@ -1,10 +1,12 @@
 import { Snake } from './snake.js';
 import { Sounds } from './sounds.js';
+import { Apples } from './apples.js';
 
 const canvas = document.getElementById('canvas');
 const scoreElem = document.getElementById('score');
 const levelElem = document.getElementById('level');
-const soundsElem = document.getElementById('sounds');
+const soundsBtn = document.getElementById('sounds');
+const restartBtn = document.getElementById('restart');
 
 if (!canvas.getContext) {
     console.warn('canvas element not supported - cannot run game');
@@ -15,6 +17,7 @@ const ctx = canvas.getContext('2d');
 const sounds = new Sounds();
 const snake = new Snake();
 const snakePartSize = 20;
+const apples = new Apples(ctx, snakePartSize);
 registerEventListeners();
 const soundSettingFromStorage = localStorage.getItem('sounds') !== null ? (localStorage.getItem('sounds').toLowerCase() === 'true') : true;
 
@@ -114,9 +117,21 @@ const game = {
 };
 
 game.level = game.levels[0];
-game.apple = createNewApple(ctx, snake);
+game.apple = apples.createNewApple(snake);
 snake.setColor(game.level.snakeColor);
-soundsElem.textContent = `Sounds ${game.soundsOn ? 'On' : 'Off'}`;
+soundsBtn.textContent = `Sounds ${game.soundsOn ? 'On' : 'Off'}`;
+
+function restartGame() {
+    game.level = game.levels[0];
+    game.points = 0;
+    game.gameOver = false;
+    snake.reset();
+    game.apple = apples.createNewApple(snake);
+    snake.setColor(game.level.snakeColor);
+    updateLevelText();
+    updateScoreText();
+    startGame();
+}
 
 function startGame() {
     window.requestAnimationFrame(draw);
@@ -133,7 +148,7 @@ function draw() {
         snake.eatApple(game.apple);
         game.apple = undefined;
         game.points += 10;
-        scoreElem.textContent = game.points;
+        updateScoreText();
         const appleSound = getRandomAppleSoundEffect();
         playSound(appleSound);
 
@@ -143,13 +158,13 @@ function draw() {
     }
 
     if (!game.apple) {
-        game.apple = createNewApple(ctx, snake);
+        game.apple = apples.createNewApple(snake);
     }
 
     snake.move();
     clearCanvas(ctx);
     snake.draw(ctx);
-    drawApple(ctx, game.apple.x, game.apple.y);
+    apples.draw(game.level.appleColor);
 
     setTimeout(() => {
         window.requestAnimationFrame(draw);
@@ -169,43 +184,15 @@ function levelUp(game) {
     game.level = game.levels[++game.level.index];
     snake.setColor(game.level.snakeColor);
     playLevelUpSoundEffect(game.level.name);
+    updateLevelText();
+}
+
+function updateLevelText() {
     levelElem.textContent = game.level.name;
 }
 
-function createNewApple(ctx, snake) {
-    const xSpots = ctx.canvas.width / snakePartSize - 2;
-    const ySpots = ctx.canvas.height / snakePartSize - 2;
-    // for now, keep it simple
-    const x = Math.floor(Math.random() * xSpots + 1) * snakePartSize;
-    const y = Math.floor(Math.random() * ySpots + 1) * snakePartSize;
-    return {
-        x,
-        y,
-    };
-
-    // const totalSpots = (ctx.canvas.width * ctx.canvas.height) / snakePartSize;
-    // const memoized = {};
-
-    // while (true) {
-    //     const randomX = Math.floor(Math.random() * ctx.canvas.width);
-    //     const randomY = Math.floor(Math.random() * ctx.canvas.height);
-        
-    // }
-}
-
-function isSpotOccupied(snake, x, y) {
-    for (let i = 0; i < snake.length; i++) {
-        if (snake.x === x && snake.y === y) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function drawApple(ctx, x, y) {
-    ctx.fillStyle = game.level.appleColor;
-    ctx.fillRect(x + 1, y + 1, snakePartSize - 1, snakePartSize - 1);
+function updateScoreText() {
+    scoreElem.textContent = game.points;
 }
 
 function getRandomAppleSoundEffect() {
@@ -236,7 +223,8 @@ function registerEventListeners() {
         e.preventDefault();
     });
 
-    soundsElem.addEventListener('click', toggleSound);
+    soundsBtn.addEventListener('click', toggleSound);
+    restartBtn.addEventListener('click', restartGame);
 
     canvas.addEventListener("touchstart", handleStart, false);
     canvas.addEventListener("touchend", handleEnd, false);
@@ -285,7 +273,7 @@ function copyTouch({ identifier, pageX, pageY }) {
 function toggleSound() {
     game.soundsOn = !game.soundsOn;
     localStorage.setItem('sounds', game.soundsOn);
-    soundsElem.textContent = `Sounds ${game.soundsOn ? 'On' : 'Off'}`;
+    soundsBtn.textContent = `Sounds ${game.soundsOn ? 'On' : 'Off'}`;
 }
 
 export { startGame };

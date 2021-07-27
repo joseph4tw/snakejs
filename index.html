@@ -14,6 +14,7 @@
             <h2>Level: <span id="level">1</span></h2>
             <h2>Score: <span id="score">0</span></h2>
             <button id="sounds">Sound On</button>
+            <button id="restart">Restart</button>
         </div>
         <canvas id="canvas" class="item-center" width="500" height="500">
             <p>Snake game canvas.</p>
@@ -21,10 +22,10 @@
         <div class="item-right">
             <h2>Instructions</h2>
             <p>
-                Use your keyboard arrows to move the snake in the desired direction.
+                Use your keyboard arrows to move the snake.
             </p>
             <p>
-                If on mobile, swipe in the direction you want the snake to move to.
+                On mobile, swipe in the direction you want the snake to move to.
             </p>
         </div>
     </div>
@@ -72,9 +73,9 @@
     </audio>
     <script type="module" src="./js/game.js"></script>
     <script type="module" src="./js/snake.js"></script>
+    <script type="module" src="./js/apples.js"></script>
     <script type="module" src="./js/circularLinkedList.js"></script>
     <script type="module" src="./js/sounds.js"></script>
-    <!-- <script src="./js/snake.js"></script> -->
     <script type="module">
         import { startGame } from './js/game.js'
         startGame();

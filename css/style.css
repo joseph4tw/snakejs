@@ -4,6 +4,19 @@ body {
     overflow-y: hidden;
 }
 
+canvas {
+    display: block;
+}
+
+.container {
+    display: inline-grid;
+    padding: 0;
+    margin: 0;
+    grid-template-columns: 200px auto 200px;
+    grid-template-rows: none;
+    grid-template-areas: "left center right";
+}
+
 .item-left {
     grid-area: left;
     padding: 1em;
@@ -16,19 +29,6 @@ body {
 .item-right {
     grid-area: right;
     padding: 1em;
-}
-
-.container {
-    display: inline-grid;
-    padding: 0;
-    margin: 0;
-    grid-template-columns: 200px auto 200px;
-    grid-template-rows: none;
-    grid-template-areas: "left center right";
-}
-
-canvas {
-    display: block;
 }
 
 #startOver {
